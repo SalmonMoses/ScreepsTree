@@ -2,9 +2,10 @@ Decision Tree library for Screeps: Arena
 
 Example:
 ```javascript
-const meleeBT = new BehaviorTree(new Selector(
-    [new AttackNode("target"), new MoveToNode("target")]
-), [new FindClosestEnemy(1, "target")]);
+const meleeBT = new BehaviorTree(new Selector([
+        new AttackNode("target"),
+        new MoveToNode("target")
+    ]), [new FindClosestEnemy(1, "target")]);
 
 export function loop() {
     const creeps = getObjectsByPrototype(Creep);

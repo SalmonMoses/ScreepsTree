@@ -3,11 +3,11 @@ import { BehaviorTreeNode, BTNodeResult } from "game/behavior_tree";
 import { Creep } from "game/prototypes/creep";
 import { Store } from "game/prototypes/store";
 
-export class ExportFromContainerNode extends BehaviorTreeNode {
+export class WithdrawFromContainerNode extends BehaviorTreeNode {
     constructor(private targetKey: string,
         private resource: string,
-        private amount: number,
-        private allowToWithdrawLess: number) {
+        private minAmount: number = 1,
+        private maxAmount: number = Infinity) {
         super();
     }
 
@@ -18,12 +18,12 @@ export class ExportFromContainerNode extends BehaviorTreeNode {
             return BTNodeResult.Fail;
         }
 
-        const amountToWithdraw = targetStore?.getUsedCapacity(this.resource);
-        if (amountToWithdraw < this.amount && !this.allowToWithdrawLess) {
+        const amountToWithdraw = Math.max(this.minAmount, Math.min(this.maxAmount, targetStore?.getUsedCapacity(this.resource)));
+        if (amountToWithdraw < this.minAmount) {
             return BTNodeResult.Fail;
-        } else {
-            creep.withdraw(targetStructure, this.resource, amountToWithdraw);
-            return BTNodeResult.Success;
         }
+        
+        creep.withdraw(targetStructure, this.resource, amountToWithdraw);
+        return BTNodeResult.Success;
     }
 }
