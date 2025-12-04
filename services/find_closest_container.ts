@@ -1,6 +1,7 @@
 import { getObjectsByPrototype, Resource, RESOURCE_ENERGY, StructureContainer } from "game";
 import { BehaviorTreeService } from "game/behavior_tree";
 import { Creep } from "game/prototypes/creep";
+import { BTNodeResult } from "../behavior_tree";
 
 export class FindClosestContainer extends BehaviorTreeService {
     constructor(tickRate: number, private targetKey: string, private resource: string) {

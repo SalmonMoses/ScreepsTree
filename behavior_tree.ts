@@ -18,14 +18,16 @@ export class BehaviorTreeNode {
         return BTNodeResult.Success;
     }
 
-    onFinish(creep: Creep, blackboard: object) { }
+    onFinish(creep: Creep, blackboard: object) {
+        this.eraseMemoryForCreep(creep);
+    }
 
     protected createDefaultMemory(creep: Creep): object {
         return {};
     }
 
     protected getMemoryForCreep(creep: Creep): object {
-        return this.memories.get(creep.id);
+        return this.memories.get(creep.id) ?? {};
     }
 
     protected eraseMemoryForCreep(creep: Creep) {
@@ -58,7 +60,7 @@ export class BehaviorTree {
             this.blackboards.set(creep.id, {});
         }
 
-        this.root.onStart(creep, this.blackboards.get(creep.id));
+        this.root.onStart(creep, this.blackboards.get(creep.id) ?? {});
     }
 
     isStartedForCreep(creep: Creep) {
@@ -66,7 +68,7 @@ export class BehaviorTree {
     }
 
     tick(creep: Creep) {
-        const creepBlackboard = this.blackboards.get(creep.id);
+        const creepBlackboard = this.blackboards.get(creep.id) ?? {};
         this.services.forEach(s => s.tryTick(creep, creepBlackboard, getTicks()))
         this.root.tick(creep, creepBlackboard);
     }

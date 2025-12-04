@@ -6,15 +6,7 @@ export class FindClosestDamagedAlly extends BehaviorTreeService {
         super(tickRate);
     }
 
-    tick(creep: Creep, blackboard: object): BTNodeResult {
-        const damagedAllyCreeps = getObjectsByPrototype(Creep).filter(c => c.my && c.hits < c.hitsMax);
-        const closest = creep.findClosestByPath(damagedAllyCreeps);
-
-        if (closest !== null) {
-            blackboard[this.blackboardKey] = closest;
-            return BTNodeResult.Success;
-        } else {
-            return BTNodeResult.Fail;
-        }
+    tick(creep: Creep, blackboard: object) {
+        blackboard[this.blackboardKey] = creep.findClosestByPath(getObjectsByPrototype(Creep).filter(c => c.my && c.hits < c.hitsMax));
     }
 }
