@@ -22,7 +22,7 @@ export class Sequence extends CompositeNode {
         if (this.children.length < 1) {
             return BTNodeResult.Fail;
         } else {
-            BTNodeResult.Run;
+            return BTNodeResult.Run;
         }
     }
 
@@ -34,12 +34,15 @@ export class Sequence extends CompositeNode {
             if (result === BTNodeResult.Success) {
                 continue;
             } else if (result === BTNodeResult.Fail) {
+                memory.currentChild = 0;
                 return BTNodeResult.Fail;
             } else if (result === BTNodeResult.Run) {
+                memory.currentChild = i;
                 return BTNodeResult.Run;
             }
         }
 
+        memory.currentChild = 0;
         return BTNodeResult.Success;
     }
 
@@ -78,14 +81,17 @@ export class Selector extends CompositeNode {
         for (let i = memory.currentChild; i < this.children.length; ++i) {
             const result = this.tickChildNode(creep, blackboard, i, i === memory.currentChild);
             if (result === BTNodeResult.Success) {
+                memory.currentChild = 0;
                 return BTNodeResult.Success;
             } else if (result === BTNodeResult.Fail) {
                 continue;
             } else if (result === BTNodeResult.Run) {
+                memory.currentChild = i;
                 return BTNodeResult.Run;
             }
         }
 
+        memory.currentChild = 0;
         return BTNodeResult.Fail;
     }
 
