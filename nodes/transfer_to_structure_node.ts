@@ -7,7 +7,7 @@ export class TransferToStructureNode extends BehaviorTreeNode {
         super()
     }
 
-    onStart(creep: Creep, blackboard: object): BTNodeResult {
+    tick(creep: Creep, blackboard: object): BTNodeResult {
         const target = blackboard[this.targetKey] as (Structure | Creep);
         if (target === undefined || target === null) {
             return BTNodeResult.Fail;

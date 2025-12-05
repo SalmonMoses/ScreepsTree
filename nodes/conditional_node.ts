@@ -8,14 +8,6 @@ export class ConditionalNode extends BehaviorTreeNode {
         super();
     }
 
-    onStart(creep: Creep, blackboard: object): BTNodeResult {
-        if (this.condition(creep, blackboard)) {
-            return this.child.onStart(creep, blackboard);
-        } else {
-            return BTNodeResult.Fail;
-        }
-    }
-
     tick(creep: Creep, blackboard: object): BTNodeResult {
         if (this.condition(creep, blackboard)) {
             return this.child.tick(creep, blackboard);

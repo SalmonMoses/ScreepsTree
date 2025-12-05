@@ -6,7 +6,7 @@ export class FindClosestEnemy extends BehaviorTreeService {
         super(tickRate);
     }
 
-    tick(creep: Creep, blackboard: object) {
+    protected tick(creep: Creep, blackboard: object) {
         blackboard[this.blackboardKey] = creep.findClosestByPath(getObjectsByPrototype(Creep).filter(c => !c.my));
     }
 }

@@ -6,7 +6,7 @@ export class AttackNode extends BehaviorTreeNode {
         super();
     }
 
-    onStart(creep: Creep, blackboard: object): BTNodeResult {
+    tick(creep: Creep, blackboard: object): BTNodeResult {
         const target = blackboard[this.blackboardKey] as GameObject;
         const attackResult = creep.attack(target);
         

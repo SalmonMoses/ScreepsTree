@@ -9,24 +9,27 @@ export enum BTNodeResult {
 export class BehaviorTreeNode {
     private memories: Map<GameObject["id"], object>;
 
-    onStart(creep: Creep, blackboard: object): BTNodeResult {
-        this.memories.set(creep.id, this.createDefaultMemory(creep));
-        return BTNodeResult.Run;
-    }
+    // onStart(creep: Creep, blackboard: object): BTNodeResult {
+    //     return BTNodeResult.Run;
+    // }
 
     tick(creep: Creep, blackboard: object): BTNodeResult {
         return BTNodeResult.Success;
     }
 
-    onFinish(creep: Creep, blackboard: object) {
-        this.eraseMemoryForCreep(creep);
-    }
+    // onFinish(creep: Creep, blackboard: object) {
+    //     this.eraseMemoryForCreep(creep);
+    // }
 
     protected createDefaultMemory(creep: Creep): object {
         return {};
     }
 
     protected getMemoryForCreep(creep: Creep): object {
+        if (!this.memories.has(creep.id)) {
+            this.memories.set(creep.id, this.createDefaultMemory(creep));
+        }
+
         return this.memories.get(creep.id) ?? {};
     }
 
@@ -55,21 +58,17 @@ export class BehaviorTree {
 
     constructor(private root: BehaviorTreeNode, private services: Array<BehaviorTreeService>) { }
 
-    startTree(creep: Creep) {
+    tick(creep: Creep) {
+        const creepBlackboard = this.getBlackboardForCreep(creep);
+        this.services.forEach(s => s.tryTick(creep, creepBlackboard, getTicks()))
+        this.root.tick(creep, creepBlackboard);
+    }
+
+    private getBlackboardForCreep(creep: Creep): object {
         if (!this.blackboards.has(creep.id)) {
             this.blackboards.set(creep.id, {});
         }
 
-        this.root.onStart(creep, this.blackboards.get(creep.id) ?? {});
-    }
-
-    isStartedForCreep(creep: Creep) {
-        return this.blackboards.has(creep.id);
-    }
-
-    tick(creep: Creep) {
-        const creepBlackboard = this.blackboards.get(creep.id) ?? {};
-        this.services.forEach(s => s.tryTick(creep, creepBlackboard, getTicks()))
-        this.root.tick(creep, creepBlackboard);
+        return this.blackboards.get(creep.id) ?? {};
     }
 }

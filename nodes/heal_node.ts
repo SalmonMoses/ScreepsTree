@@ -6,7 +6,7 @@ export class HealNode extends BehaviorTreeNode {
         super();
     }
 
-    onStart(creep: Creep, blackboard: object): BTNodeResult {
+    tick(creep: Creep, blackboard: object): BTNodeResult {
         const target = blackboard[this.blackboardKey] as Creep;
         const attackResult = creep.heal(target);
         

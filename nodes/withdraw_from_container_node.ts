@@ -11,7 +11,7 @@ export class WithdrawFromContainerNode extends BehaviorTreeNode {
         super();
     }
 
-    onStart(creep: Creep, blackboard: object): BTNodeResult {
+    tick(creep: Creep, blackboard: object): BTNodeResult {
         const targetStructure = blackboard[this.targetKey] as Structure;
         const targetStore: Store | undefined = targetStructure["store"];
         if (targetStore === undefined) {
